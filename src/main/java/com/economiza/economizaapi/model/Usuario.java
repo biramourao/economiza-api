@@ -17,7 +17,6 @@ import lombok.Setter;
 @Entity
 @Table
 public class Usuario {
-
 	
 	@Id
 	private String email;
