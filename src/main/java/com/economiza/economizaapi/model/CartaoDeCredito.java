@@ -1,7 +1,5 @@
 package com.economiza.economizaapi.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,8 +18,8 @@ import lombok.Setter;
 @Getter @Setter
 
 @Entity
-@Table
-public class Gasto {
+@Table(name = "Cartao_de_Credito")
+public class CartaoDeCredito {
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private int cod;
@@ -30,24 +28,14 @@ public class Gasto {
 	private String nome;
 	
 	@Column(nullable = false)
-	private double valor;
+	private int diaVencFatura;
 	
 	@Column(nullable = false)
-	private Date vencimento;
+	private double limiteTotal;
 	
 	@Column(nullable = false)
-	private int qtdParcelas;
-	
-	@Column()
-	private Date dtPagamento;
+	private double SaldoRestante;
 	
 	@ManyToOne
 	private Usuario usuario;
-	
-	@ManyToOne
-	private CategoriaGasto categoriaGasto;
-	
-	@ManyToOne
-	private CartaoDeCredito cartaoDeCredito;
-
 }

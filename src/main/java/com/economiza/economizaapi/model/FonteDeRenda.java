@@ -15,39 +15,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter @Setter
 
 @Entity
-@Table
-public class Gasto {
+@Table(name = "Categoria_de_Renda")
+public class FonteDeRenda {
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private int cod;
 	
 	@Column(length = 45, nullable = false)
-	private String nome;
+	private String descricao;
 	
 	@Column(nullable = false)
 	private double valor;
 	
 	@Column(nullable = false)
-	private Date vencimento;
+	private int frequencia;
 	
 	@Column(nullable = false)
-	private int qtdParcelas;
-	
-	@Column()
-	private Date dtPagamento;
+	private Date dtInsercao;
 	
 	@ManyToOne
 	private Usuario usuario;
-	
-	@ManyToOne
-	private CategoriaGasto categoriaGasto;
-	
-	@ManyToOne
-	private CartaoDeCredito cartaoDeCredito;
 
 }
