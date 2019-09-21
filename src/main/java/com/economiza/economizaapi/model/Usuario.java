@@ -2,6 +2,8 @@ package com.economiza.economizaapi.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -18,7 +20,10 @@ import lombok.Setter;
 @Table
 public class Usuario {
 	
-	@Id
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private int cod;
+	
+	@Column(length = 60, nullable = false)
 	private String email;
 	
 	@Column(length = 100, nullable = false)
