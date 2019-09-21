@@ -21,8 +21,8 @@ import lombok.Setter;
 @Table(name = "Cartao_de_Credito")
 public class CartaoDeCredito {
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private int cod;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long cod;
 	
 	@Column(length = 45, nullable = false)
 	private String nome;

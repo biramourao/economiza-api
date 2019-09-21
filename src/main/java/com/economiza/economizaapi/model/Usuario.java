@@ -20,8 +20,8 @@ import lombok.Setter;
 @Table
 public class Usuario {
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private int cod;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long cod;
 	
 	@Column(length = 60, nullable = false)
 	private String email;

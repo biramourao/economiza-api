@@ -23,8 +23,8 @@ import lombok.Setter;
 @Table(name = "Categoria_de_Renda")
 public class FonteDeRenda {
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private int cod;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long cod;
 	
 	@Column(length = 45, nullable = false)
 	private String descricao;

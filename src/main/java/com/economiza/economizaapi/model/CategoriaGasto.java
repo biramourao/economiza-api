@@ -20,8 +20,8 @@ import lombok.Setter;
 @Table(name = "Categoria_Gasto")
 public class CategoriaGasto {
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private int cod;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long cod;
 	
 	@Column(length = 45, nullable = false)
 	private String descricao;

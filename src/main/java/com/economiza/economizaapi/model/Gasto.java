@@ -23,8 +23,8 @@ import lombok.Setter;
 @Table
 public class Gasto {
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private int cod;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long cod;
 	
 	@Column(length = 45, nullable = false)
 	private String nome;
