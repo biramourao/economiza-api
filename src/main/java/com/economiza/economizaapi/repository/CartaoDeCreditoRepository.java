@@ -11,6 +11,9 @@ import com.economiza.economizaapi.model.CartaoDeCredito;
 @Repository
 public interface CartaoDeCreditoRepository extends JpaRepository<CartaoDeCredito, Long>{
 
-	@Query("UPDATE cartao_de_credito SET saldo_restante = ?2 WHERE cod = ?1")
+	@Query("UPDATE CartaoDeCredito SET saldo_restante = ?2 WHERE cod = ?1")
 	public Optional<CartaoDeCredito> calcularSaldoRestante(Long cod, double saldoRestante);
+	
+	
 }
+

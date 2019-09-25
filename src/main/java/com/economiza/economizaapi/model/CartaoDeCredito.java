@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter @Setter
 
 @Entity
-@Table(name = "Cartao_de_Credito")
+@Table(name = "cartao_de_credito")
 public class CartaoDeCredito {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +33,8 @@ public class CartaoDeCredito {
 	@Column(nullable = false)
 	private double limiteTotal;
 	
-	@Column(nullable = false)
-	private double SaldoRestante;
+	@Column(name="saldo_restante", nullable = false)
+	private double saldoRestante;
 	
 	@ManyToOne
 	private Usuario usuario;
