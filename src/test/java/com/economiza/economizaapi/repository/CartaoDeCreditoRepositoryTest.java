@@ -85,4 +85,11 @@ public class CartaoDeCreditoRepositoryTest {
 		Optional<CartaoDeCredito> savedCartaoDeCredito = cartaoDeCreditoRepository.findById(1L);
 		assertThat(savedCartaoDeCredito.get().getSaldoRestante()).isEqualTo(250.00);
 	}
+	@Test
+	public void gFindByUsuarioTest() {
+		List<CartaoDeCredito> cartaoDeCredito = cartaoDeCreditoRepository.findByUsuarioCod(1L);
+		System.out.println(cartaoDeCredito);
+		assertThat(cartaoDeCredito.size()).isEqualTo(1);
+		
+	}
 }
