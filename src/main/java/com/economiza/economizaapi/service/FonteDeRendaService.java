@@ -1,10 +1,12 @@
 package com.economiza.economizaapi.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.economiza.economizaapi.exception.NotFoundException;
 import com.economiza.economizaapi.model.FonteDeRenda;
 import com.economiza.economizaapi.repository.FonteDeRendaRepository;
 
@@ -28,7 +30,8 @@ public class FonteDeRendaService {
 	
 	
 	public FonteDeRenda getById(Long id) {
-		return fonteDeRendaRepository.findById(id).get();
+		Optional<FonteDeRenda> result = fonteDeRendaRepository.findById(id);
+		return result.orElseThrow(()-> new NotFoundException("Fonte de Renda com id " + id + ", não encontrado!"));
 	}
 	
 	

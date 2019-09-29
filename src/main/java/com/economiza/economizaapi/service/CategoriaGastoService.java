@@ -6,10 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.economiza.economizaapi.exception.NotFoundException;
 import com.economiza.economizaapi.model.CategoriaGasto;
 import com.economiza.economizaapi.repository.CategoriaGastoRepository;
 
-import javassist.NotFoundException;
 
 @Service
 public class CategoriaGastoService {
@@ -24,9 +24,9 @@ public class CategoriaGastoService {
 		return categoriaGastoRepository.save(categoriaGasto);
 	}
 	
-	public CategoriaGasto getById(Long id) throws NotFoundException {
+	public CategoriaGasto getById(Long id){
 		Optional<CategoriaGasto> result = categoriaGastoRepository.findById(id);
-		return result.orElseThrow(()-> new NotFoundException("Categoria não encontrada = " + id));
+		return result.orElseThrow(()-> new NotFoundException("Categoria com id " + id + ", não encontrado!"));
 	}
 	
 	public List<CategoriaGasto> listAll() {

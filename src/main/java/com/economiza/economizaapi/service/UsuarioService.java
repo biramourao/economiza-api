@@ -6,11 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.economiza.economizaapi.exception.NotFoundException;
 import com.economiza.economizaapi.model.Usuario;
 import com.economiza.economizaapi.repository.UsuarioRepository;
 import com.economiza.economizaapi.service.util.HashUtil;
 
-import javassist.NotFoundException;
 
 @Service
 public class UsuarioService {
@@ -32,10 +32,10 @@ public class UsuarioService {
 		return updatedUser;
 	}
 	
-	public Usuario getById(Long id) throws NotFoundException {
+	public Usuario getById(Long id) {
 		Optional<Usuario> result = usuarioRepository.findById(id);
 		
-		return result.orElseThrow(()-> new NotFoundException("Usuário não encontrado = " + id));
+		return result.orElseThrow(()-> new NotFoundException("Usuário com id " + id + ", não encontrado!"));
 	}
 	
 	public List<Usuario> listAll() {
@@ -47,6 +47,7 @@ public class UsuarioService {
 		password = HashUtil.getSecureHash(password);
 		
 		Optional<Usuario> result = usuarioRepository.login(email, password);
-		return result.get();
+		return result.orElseThrow(()-> new NotFoundException("Login ou Senha Incorretos!"));
+		
 	}
 }
