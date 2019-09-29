@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.economiza.economizaapi.model.CategoriaGasto;
 import com.economiza.economizaapi.repository.CategoriaGastoRepository;
 
 import javassist.NotFoundException;
 
+@Service
 public class CategoriaGastoService {
 
 @Autowired private CategoriaGastoRepository categoriaGastoRepository;
@@ -31,4 +33,5 @@ public class CategoriaGastoService {
 		List<CategoriaGasto> categoriasGasto = categoriaGastoRepository.findAll();
 		return categoriasGasto;
 	}
+	
 }
