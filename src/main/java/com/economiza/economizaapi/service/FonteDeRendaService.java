@@ -40,4 +40,8 @@ public class FonteDeRendaService {
 	public void deleteById(Long id) {
 		fonteDeRendaRepository.deleteById(id);
 	}
+	
+	public List<FonteDeRenda> findByUsuarioCod(Long cod){
+		return fonteDeRendaRepository.findByUsuarioCod(cod);
+	}
 }
