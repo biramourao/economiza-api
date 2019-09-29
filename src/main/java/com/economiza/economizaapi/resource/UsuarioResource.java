@@ -1,13 +1,10 @@
 package com.economiza.economizaapi.resource;
 
 import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,61 +13,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.economiza.economizaapi.dto.UsuarioLoginDTO;
 import com.economiza.economizaapi.model.Usuario;
 import com.economiza.economizaapi.repository.UsuarioRepository;
+import com.economiza.economizaapi.service.UsuarioService;
+
+import javassist.NotFoundException;
 
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioResource {
-/*
-	@Autowired
-	private UsuarioRepository usuarioRepository;
+	@Autowired private UsuarioService usuarioService;
+	@Autowired private UsuarioRepository UsuarioRepository;
 
 	@PostMapping
-	public Usuario adicionar(@Valid @RequestBody Usuario usuario) {
-		return usuarioRepository.save(usuario);
+	public ResponseEntity<Usuario> save(@RequestBody Usuario usuario) {
+		Usuario createdUser = usuarioService.save(usuario);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+	}
+
+	@PutMapping("/{cod}")
+	public ResponseEntity<Usuario> update(@PathVariable(name = "cod") Long cod, @RequestBody Usuario user) {
+		user.setCod(cod);
+		Usuario updatedUser = usuarioService.update(user);
+		return ResponseEntity.ok(updatedUser);
+
+	}
+
+	@GetMapping("/{cod}")
+	public ResponseEntity<Usuario> getById(@PathVariable("cod") Long cod) throws NotFoundException {
+		Usuario user = usuarioService.getById(cod);
+		return ResponseEntity.ok(user);
 	}
 
 	@GetMapping
-	public List<Usuario> listar() {
-		return usuarioRepository.findAll();
+	public ResponseEntity<List<Usuario>> listAll() {
+		List<Usuario> users = UsuarioRepository.findAll();
+		return ResponseEntity.ok(users);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Usuario>> buscar(@PathVariable Long id) {
-		Optional<Usuario> usuario = usuarioRepository.findById(id);
-
-		if (usuario == null) {
-			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok(usuario);
+	@PostMapping("/login")
+	public ResponseEntity<Usuario> login(@RequestBody UsuarioLoginDTO user) {
+		Usuario loggedUser = usuarioService.login(user.getEmail(), user.getSenha());
+		return ResponseEntity.ok(loggedUser);
 	}
-
-	@PutMapping("/{id}")
-	public ResponseEntity<Usuario> atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
-		Usuario existente = usuarioRepository.findById(id);
-		
-		if (existente == null) {
-			return ResponseEntity.notFound().build();
-		}else {
-			
-		existente = usuarioRepository.save(usuario);
-		return ResponseEntity.ok(usuario);
-		}	
-	}
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> remover(@PathVariable Long id) {
-		Usuario usuario = usuarioRepository.findOne(id);
-
-		if (usuario == null) {
-			return ResponseEntity.notFound().build();
-		}
-
-		usuarioRepository.delete(contato);
-
-		return ResponseEntity.noContent().build();
-	}
-*/
 }
