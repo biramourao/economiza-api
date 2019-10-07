@@ -34,10 +34,11 @@ public class UsuarioResource {
 
 	@PutMapping("/{cod}")
 	public ResponseEntity<Usuario> update(@PathVariable(name = "cod") Long cod, @RequestBody Usuario user) {
-		user.setCod(cod);
-		Usuario updatedUser = usuarioService.update(user);
+		Usuario updateUser = UsuarioRepository.findById(cod).get();
+		updateUser.setEmail(user.getEmail());
+		updateUser.setNome(user.getNome());
+		Usuario updatedUser = usuarioService.update(updateUser);
 		return ResponseEntity.ok(updatedUser);
-
 	}
 
 	@GetMapping("/{cod}")

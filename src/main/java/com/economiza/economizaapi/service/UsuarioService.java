@@ -25,8 +25,6 @@ public class UsuarioService {
 	}
 	
 	public Usuario update(Usuario user) {
-		String hash = HashUtil.getSecureHash(user.getSenha());
-		user.setSenha(hash);
 		
 		Usuario updatedUser = usuarioRepository.save(user);
 		return updatedUser;
