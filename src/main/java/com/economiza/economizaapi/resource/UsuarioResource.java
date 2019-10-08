@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +19,7 @@ import com.economiza.economizaapi.dto.UsuarioLoginDTO;
 import com.economiza.economizaapi.model.Usuario;
 import com.economiza.economizaapi.repository.UsuarioRepository;
 import com.economiza.economizaapi.service.UsuarioService;
+import com.economiza.economizaapi.service.util.HashUtil;
 
 import javassist.NotFoundException;
 
@@ -34,7 +36,7 @@ public class UsuarioResource {
 	}
 
 	@PutMapping("/{cod}")
-	public ResponseEntity<Usuario> update(@PathVariable(name = "cod") Long cod, @RequestBody Usuario user) throws SQLException {
+	public ResponseEntity<Usuario> update(@PathVariable(name = "cod") Long cod, @RequestBody Usuario user){
 		Usuario updateUser = UsuarioRepository.findById(cod).get();
 		updateUser.setEmail(user.getEmail());
 		updateUser.setNome(user.getNome());
@@ -42,8 +44,16 @@ public class UsuarioResource {
 		return ResponseEntity.ok(updatedUser);
 	}
 
+	@PatchMapping("/{cod}")
+	public ResponseEntity<Usuario> updateSenha(@PathVariable(name = "cod") Long cod, @RequestBody Usuario user){
+		Usuario updateUser = UsuarioRepository.findById(cod).get();
+		String hash = HashUtil.getSecureHash(user.getSenha());
+		updateUser.setSenha(hash);
+		Usuario updatedUser = usuarioService.update(updateUser);
+		return ResponseEntity.ok(updatedUser);
+	}
 	@GetMapping("/{cod}")
-	public ResponseEntity<Usuario> getById(@PathVariable("cod") Long cod) throws NotFoundException {
+	public ResponseEntity<Usuario> getById(@PathVariable("cod") Long cod) {
 		Usuario user = usuarioService.getById(cod);
 		return ResponseEntity.ok(user);
 	}
