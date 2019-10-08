@@ -24,10 +24,11 @@ public class UsuarioService {
 		return createdUser;
 	}
 	
-	public Usuario update(Usuario user) {
+	public Usuario update(Usuario user){
 		
-		Usuario updatedUser = usuarioRepository.save(user);
-		return updatedUser;
+			Usuario updatedUser = usuarioRepository.save(user);
+			return updatedUser;
+		
 	}
 	
 	public Usuario getById(Long id) {

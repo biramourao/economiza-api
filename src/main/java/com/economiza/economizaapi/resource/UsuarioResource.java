@@ -1,5 +1,6 @@
 package com.economiza.economizaapi.resource;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class UsuarioResource {
 	}
 
 	@PutMapping("/{cod}")
-	public ResponseEntity<Usuario> update(@PathVariable(name = "cod") Long cod, @RequestBody Usuario user) {
+	public ResponseEntity<Usuario> update(@PathVariable(name = "cod") Long cod, @RequestBody Usuario user) throws SQLException {
 		Usuario updateUser = UsuarioRepository.findById(cod).get();
 		updateUser.setEmail(user.getEmail());
 		updateUser.setNome(user.getNome());
