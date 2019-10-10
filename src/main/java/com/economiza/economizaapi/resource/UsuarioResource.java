@@ -1,11 +1,11 @@
 package com.economiza.economizaapi.resource;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,20 +21,20 @@ import com.economiza.economizaapi.repository.UsuarioRepository;
 import com.economiza.economizaapi.service.UsuarioService;
 import com.economiza.economizaapi.service.util.HashUtil;
 
-import javassist.NotFoundException;
-
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioResource {
 	@Autowired private UsuarioService usuarioService;
 	@Autowired private UsuarioRepository UsuarioRepository;
 
+	@CrossOrigin
 	@PostMapping
 	public ResponseEntity<Usuario> save(@RequestBody Usuario usuario) {
 		Usuario createdUser = usuarioService.save(usuario);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
 	}
 
+	@CrossOrigin
 	@PutMapping("/{cod}")
 	public ResponseEntity<Usuario> update(@PathVariable(name = "cod") Long cod, @RequestBody Usuario user){
 		Usuario updateUser = UsuarioRepository.findById(cod).get();
@@ -44,6 +44,7 @@ public class UsuarioResource {
 		return ResponseEntity.ok(updatedUser);
 	}
 
+	@CrossOrigin
 	@PatchMapping("/{cod}")
 	public ResponseEntity<Usuario> updateSenha(@PathVariable(name = "cod") Long cod, @RequestBody Usuario user){
 		Usuario updateUser = UsuarioRepository.findById(cod).get();
@@ -52,18 +53,21 @@ public class UsuarioResource {
 		Usuario updatedUser = usuarioService.update(updateUser);
 		return ResponseEntity.ok(updatedUser);
 	}
+	@CrossOrigin
 	@GetMapping("/{cod}")
 	public ResponseEntity<Usuario> getById(@PathVariable("cod") Long cod) {
 		Usuario user = usuarioService.getById(cod);
 		return ResponseEntity.ok(user);
 	}
-
+	
+	@CrossOrigin
 	@GetMapping
 	public ResponseEntity<List<Usuario>> listAll() {
 		List<Usuario> users = UsuarioRepository.findAll();
 		return ResponseEntity.ok(users);
 	}
 
+	@CrossOrigin
 	@PostMapping("/login")
 	public ResponseEntity<Usuario> login(@RequestBody UsuarioLoginDTO user) {
 		Usuario loggedUser = usuarioService.login(user.getEmail(), user.getSenha());
