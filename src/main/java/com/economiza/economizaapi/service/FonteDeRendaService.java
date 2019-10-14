@@ -1,5 +1,6 @@
 package com.economiza.economizaapi.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class FonteDeRendaService {
 	
 	
 	public FonteDeRenda save(FonteDeRenda fonteDeRenda) {
-		
+		fonteDeRenda.setDtInsercao(new Date());
 		return fonteDeRendaRepository.save(fonteDeRenda);
 		
 	}
