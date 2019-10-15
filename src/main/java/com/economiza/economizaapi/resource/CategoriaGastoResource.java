@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.economiza.economizaapi.model.CategoriaGasto;
-import com.economiza.economizaapi.model.FonteDeRenda;
 import com.economiza.economizaapi.repository.CategoriaGastoRepository;
 import com.economiza.economizaapi.service.CategoriaGastoService;
 
