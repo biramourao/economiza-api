@@ -31,7 +31,7 @@ public class CartaoDeCreditoService {
 	
 	
 	public CartaoDeCredito getById(Long id) {
-		Optional<CartaoDeCredito> result = cartaoDeCreditoRepository.findById(1L);
+		Optional<CartaoDeCredito> result = cartaoDeCreditoRepository.findById(id);
 		
 		return result.orElseThrow(()-> new NotFoundException("Cartão de Crédito com id " + id + ", não encontrado!"));
 	}

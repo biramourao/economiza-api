@@ -62,9 +62,9 @@ public class CartaoDeCreditoResource {
 	@DeleteMapping("/{cod}")
 	@ResponseBody
 	public ResponseEntity delete(@PathVariable(name = "cod") Long cod) {
-		CartaoDeCredito categoriaGasto = null;
-		categoriaGasto = cartaoDeCreditoService.getById(cod);
-		if(categoriaGasto != null) {
+		CartaoDeCredito cartaoDeCredito = null;
+		cartaoDeCredito = cartaoDeCreditoService.getById(cod);
+		if(cartaoDeCredito != null) {
 			cartaoDeCreditoService.deleteById(cod);
 			return new ResponseEntity(HttpStatus.OK);
 		}else{
