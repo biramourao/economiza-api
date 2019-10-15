@@ -6,15 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.economiza.economizaapi.model.CategoriaGasto;
+import com.economiza.economizaapi.model.FonteDeRenda;
 import com.economiza.economizaapi.repository.CategoriaGastoRepository;
 import com.economiza.economizaapi.service.CategoriaGastoService;
 
@@ -51,5 +54,18 @@ public class CategoriaGastoResource {
 	public ResponseEntity<List<CategoriaGasto>> listAll() {
 		List<CategoriaGasto> categoriaGasto = categoriaGastoRepository.findAll();
 		return ResponseEntity.ok(categoriaGasto);
+	}
+	@CrossOrigin
+	@DeleteMapping("/{cod}")
+	@ResponseBody
+	public ResponseEntity delete(@PathVariable(name = "cod") Long cod) {
+		CategoriaGasto categoriaGasto = null;
+		categoriaGasto = categoriaGastoService.getById(cod);
+		if(categoriaGasto != null) {
+			categoriaGastoService.deleteById(cod);
+			return new ResponseEntity(HttpStatus.OK);
+		}else{
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
 	}
 }

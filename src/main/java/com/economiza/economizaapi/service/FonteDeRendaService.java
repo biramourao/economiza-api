@@ -26,6 +26,7 @@ public class FonteDeRendaService {
 	
 	
 	public FonteDeRenda update(FonteDeRenda fonteDeRenda) {
+		fonteDeRenda.setDtInsercao(fonteDeRendaRepository.findById(fonteDeRenda.getCod()).get().getDtInsercao());
 		return fonteDeRendaRepository.save(fonteDeRenda);
 	}
 	

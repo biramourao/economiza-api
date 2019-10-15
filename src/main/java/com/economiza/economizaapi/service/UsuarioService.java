@@ -49,4 +49,7 @@ public class UsuarioService {
 		return result.orElseThrow(()-> new NotFoundException("Login ou Senha Incorretos!"));
 		
 	}
+	public void deleteById(Long id) {
+		usuarioRepository.deleteById(id);
+	}
 }

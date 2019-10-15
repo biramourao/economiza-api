@@ -34,4 +34,8 @@ public class CategoriaGastoService {
 		return categoriasGasto;
 	}
 	
+	public void deleteById(Long id) {
+		categoriaGastoRepository.deleteById(id);
+	}
+	
 }
