@@ -54,6 +54,7 @@ public class CategoriaGastoResource {
 		List<CategoriaGasto> categoriaGasto = categoriaGastoRepository.findAll();
 		return ResponseEntity.ok(categoriaGasto);
 	}
+	@SuppressWarnings("rawtypes")
 	@CrossOrigin
 	@DeleteMapping("/{cod}")
 	@ResponseBody

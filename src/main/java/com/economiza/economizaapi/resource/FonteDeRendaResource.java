@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.economiza.economizaapi.model.CategoriaGasto;
 import com.economiza.economizaapi.model.FonteDeRenda;
-import com.economiza.economizaapi.model.Usuario;
 import com.economiza.economizaapi.repository.FonteDeRendaRepository;
 import com.economiza.economizaapi.service.FonteDeRendaService;
 
@@ -57,6 +55,7 @@ public class FonteDeRendaResource {
 		return ResponseEntity.ok(fontesDeRenda);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@CrossOrigin
 	@DeleteMapping("/{cod}")
 	@ResponseBody

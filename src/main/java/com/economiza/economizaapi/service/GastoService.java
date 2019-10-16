@@ -48,8 +48,12 @@ public class GastoService {
 	public List<Gasto> findByCategoriaGastoCod(Long cod) {
 		return gastoRepository.findByCategoriaGastoCod(cod);
 	}
-	public int efetuarPagamento(Long cod, Date dtPagamento) {
-		return gastoRepository.efetuarPagamento(cod, dtPagamento);
+	public Gasto efetuarPagamento(Long cod, Date dtPagamento) {
+		Optional<Gasto> gasto;
+		gastoRepository.efetuarPagamento(cod, dtPagamento);
+		gasto = gastoRepository.findById(cod);
+		return gasto.orElseThrow(() -> new NotFoundException("Gasto com id " + cod + ", não encontrado!"));
+	
 	}
 
 }

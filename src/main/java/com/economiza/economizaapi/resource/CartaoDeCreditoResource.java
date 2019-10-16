@@ -17,12 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.economiza.economizaapi.model.CartaoDeCredito;
-import com.economiza.economizaapi.model.CategoriaGasto;
-import com.economiza.economizaapi.model.FonteDeRenda;
 import com.economiza.economizaapi.repository.CartaoDeCreditoRepository;
-import com.economiza.economizaapi.repository.CategoriaGastoRepository;
 import com.economiza.economizaapi.service.CartaoDeCreditoService;
-import com.economiza.economizaapi.service.CategoriaGastoService;
 
 @RestController
 @RequestMapping("/cartoes-de-credito")
@@ -58,6 +54,7 @@ public class CartaoDeCreditoResource {
 		List<CartaoDeCredito> categoriaGasto = cartaoDeCreditoRepository.findAll();
 		return ResponseEntity.ok(categoriaGasto);
 	}
+	@SuppressWarnings("rawtypes")
 	@CrossOrigin
 	@DeleteMapping("/{cod}")
 	@ResponseBody
