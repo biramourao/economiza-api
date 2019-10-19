@@ -5,6 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +33,7 @@ import com.economiza.economizaapi.service.util.HashUtil;
 public class UsuarioResource {
 	@Autowired private UsuarioService usuarioService;
 	@Autowired private UsuarioRepository UsuarioRepository;
+	@Autowired private AuthenticationManager authenticationManager;
 
 	@CrossOrigin
 	@PostMapping
@@ -72,8 +78,13 @@ public class UsuarioResource {
 	@CrossOrigin
 	@PostMapping("/login")
 	public ResponseEntity<Usuario> login(@RequestBody UsuarioLoginDTO user) {
-		Usuario loggedUser = usuarioService.login(user.getEmail(), user.getSenha());
-		return ResponseEntity.ok(loggedUser);
+
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getSenha());
+		Authentication auth = authenticationManager.authenticate(token);
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		
+		
+		return ResponseEntity.ok(null);
 	}
 	@SuppressWarnings("rawtypes")
 	@CrossOrigin
