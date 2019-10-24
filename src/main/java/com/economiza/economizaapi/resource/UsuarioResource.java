@@ -1,6 +1,7 @@
 package com.economiza.economizaapi.resource;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.economiza.economizaapi.dto.UsuarioLoginDTO;
 import com.economiza.economizaapi.model.Usuario;
 import com.economiza.economizaapi.repository.UsuarioRepository;
+import com.economiza.economizaapi.security.JwtManager;
 import com.economiza.economizaapi.service.UsuarioService;
 import com.economiza.economizaapi.service.util.HashUtil;
 
@@ -34,6 +36,7 @@ public class UsuarioResource {
 	@Autowired private UsuarioService usuarioService;
 	@Autowired private UsuarioRepository UsuarioRepository;
 	@Autowired private AuthenticationManager authenticationManager;
+	@Autowired private JwtManager jwtManager;
 
 	@CrossOrigin
 	@PostMapping
@@ -77,15 +80,24 @@ public class UsuarioResource {
 
 	@CrossOrigin
 	@PostMapping("/login")
-	public ResponseEntity<Usuario> login(@RequestBody UsuarioLoginDTO user) {
+	public ResponseEntity<String> login(@RequestBody UsuarioLoginDTO user) {
 
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getSenha());
 		Authentication auth = authenticationManager.authenticate(token);
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		
+		User userSpring = (User) auth.getPrincipal();
 		
-		return ResponseEntity.ok(null);
+		String email =  userSpring.getUsername();
+		List<String> roles = userSpring
+				.getAuthorities()
+				.stream()
+				.map(authority -> authority.getAuthority())
+				.collect(Collectors.toList());
+		String jwt = jwtManager.createToken(email, roles);
+		return ResponseEntity.ok(jwt);
 	}
+	
 	@SuppressWarnings("rawtypes")
 	@CrossOrigin
 	@DeleteMapping("/{cod}")
