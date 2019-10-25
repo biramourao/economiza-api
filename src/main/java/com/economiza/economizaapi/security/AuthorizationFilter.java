@@ -35,7 +35,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 		String jwt = request.getHeader(HttpHeaders.AUTHORIZATION);
 		
 		if (jwt == null || !jwt.startsWith(SecurityConstants.JWT_PROVIDER)) {
-			ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED.value(), SecurityConstants.JWT_INVALID_TOKEN, new Date());
+			ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED.value(), SecurityConstants.JWT_INVALID_TOKEN_MSG, new Date());
 			PrintWriter writer = response.getWriter();
 			ObjectMapper mapper = new ObjectMapper();
 			String apiErrorString = mapper.writeValueAsString(apiError);
