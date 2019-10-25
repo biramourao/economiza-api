@@ -33,46 +33,50 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String jwt = request.getHeader(HttpHeaders.AUTHORIZATION);
-		
+
 		if (jwt == null || !jwt.startsWith(SecurityConstants.JWT_PROVIDER)) {
-			ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED.value(), SecurityConstants.JWT_INVALID_TOKEN_MSG, new Date());
+			ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED.value(), SecurityConstants.JWT_INVALID_TOKEN_MSG,
+					new Date());
 			PrintWriter writer = response.getWriter();
 			ObjectMapper mapper = new ObjectMapper();
 			String apiErrorString = mapper.writeValueAsString(apiError);
 			writer.write(apiErrorString);
-			
+
 			response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
-			
+
 			return;
 		}
-		
+
 		jwt = jwt.replace(SecurityConstants.JWT_PROVIDER, "");
 		try {
 			Claims clains = new JwtManager().parseToken(jwt);
 			String email = clains.getSubject();
 			List<String> roles = (List<String>) clains.get(SecurityConstants.JWT_ROLE_KEY);
-			
+
 			List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-			roles.forEach(role ->{
+			roles.forEach(role -> {
 				grantedAuthorities.add(new SimpleGrantedAuthority(role));
-				}
-			);
-			
+			});
+
 			Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, grantedAuthorities);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-			
+
 		} catch (Exception e) {
 			ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), new Date());
 			PrintWriter writer = response.getWriter();
 			ObjectMapper mapper = new ObjectMapper();
 			String apiErrorString = mapper.writeValueAsString(apiError);
 			writer.write(apiErrorString);
-			
+
 			response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
-			
-			return;		}
+
+			return;
+
+		}
+
+		filterChain.doFilter(request, response);
 	}
 
 }
