@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import com.economiza.economizaapi.constant.SecurityConstants;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -22,5 +24,13 @@ public class JwtManager {
 					.signWith(SignatureAlgorithm.HS512, SecurityConstants.API_KEY.getBytes())
 					.compact();
 		return jwt;
+	}
+	
+	public Claims parseToken(String jwt) throws JwtException{
+		Claims claims = Jwts.parser()
+				.setSigningKey(SecurityConstants.API_KEY.getBytes())
+				.parseClaimsJws(jwt)
+				.getBody();
+		return claims;
 	}
 }
