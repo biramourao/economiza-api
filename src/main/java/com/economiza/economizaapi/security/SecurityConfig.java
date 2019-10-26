@@ -19,7 +19,8 @@ import com.economiza.economizaapi.service.UsuarioService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
