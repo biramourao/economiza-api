@@ -45,8 +45,8 @@ public class GastoService {
 	public List<Gasto> findByCartaoDeCreditoCod(Long cod) {
 		return gastoRepository.findByCartaoDeCreditoCod(cod);
 	}
-	public List<Gasto> findByCategoriaGastoCod(Long cod) {
-		return gastoRepository.findByCategoriaGastoCod(cod);
+	public List<Gasto> findByCategoriaGastoCodAndUsuarioCod(Long codCategoria, Long codUsuario) {
+		return gastoRepository.findByCategoriaGastoCodAndUsuarioCod(codCategoria, codUsuario);
 	}
 	public Gasto efetuarPagamento(Long cod, Date dtPagamento) {
 		Optional<Gasto> gasto;

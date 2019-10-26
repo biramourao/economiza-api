@@ -16,7 +16,7 @@ public interface GastoRepository extends JpaRepository<Gasto, Long>{
 	
 	public List<Gasto> findByCartaoDeCreditoCod(Long cod);
 	
-	public List<Gasto> findByCategoriaGastoCod(Long cod);
+	public List<Gasto> findByCategoriaGastoCodAndUsuarioCod(Long codCategoria, Long codUsuario);
 	
 	@Transactional(readOnly = false)
 	@Modifying
