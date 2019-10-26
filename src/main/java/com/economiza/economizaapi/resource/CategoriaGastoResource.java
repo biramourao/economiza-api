@@ -1,10 +1,13 @@
 package com.economiza.economizaapi.resource;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.economiza.economizaapi.exception.NotFoundException;
 import com.economiza.economizaapi.model.CategoriaGasto;
+import com.economiza.economizaapi.model.Usuario;
 import com.economiza.economizaapi.repository.CategoriaGastoRepository;
+import com.economiza.economizaapi.repository.UsuarioRepository;
 import com.economiza.economizaapi.service.CategoriaGastoService;
 
 @RestController
@@ -25,6 +31,7 @@ import com.economiza.economizaapi.service.CategoriaGastoService;
 public class CategoriaGastoResource {
 	@Autowired private CategoriaGastoService categoriaGastoService;
 	@Autowired private CategoriaGastoRepository categoriaGastoRepository;
+	@Autowired private UsuarioRepository usuarioRepository;
 
 	@CrossOrigin
 	@PostMapping
@@ -34,6 +41,7 @@ public class CategoriaGastoResource {
 	}
 
 	@CrossOrigin
+	@PreAuthorize("@accessManager.usuarioDaCategoriaGasto(#cod)")
 	@PutMapping("/{cod}")
 	public ResponseEntity<CategoriaGasto> update(@PathVariable(name = "cod") Long cod, @RequestBody CategoriaGasto categoriaGasto){
 		categoriaGasto.setCod(cod);
@@ -42,6 +50,7 @@ public class CategoriaGastoResource {
 	}
 
 	@CrossOrigin
+	@PreAuthorize("@accessManager.usuarioDaCategoriaGasto(#cod)")
 	@GetMapping("/{cod}")
 	public ResponseEntity<CategoriaGasto> getById(@PathVariable("cod") Long cod) {
 		CategoriaGasto categoriaGasto = categoriaGastoService.getById(cod);
@@ -50,12 +59,19 @@ public class CategoriaGastoResource {
 
 	@CrossOrigin
 	@GetMapping
-	public ResponseEntity<List<CategoriaGasto>> listAll() {
-		List<CategoriaGasto> categoriaGasto = categoriaGastoRepository.findAll();
+	public ResponseEntity<List<CategoriaGasto>> findByUserCod() {
+		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Usuario> result = usuarioRepository.findByEmail(email);
+		if(!result.isPresent())  {
+			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
+		}
+		Usuario usuario = result.get();
+		List<CategoriaGasto> categoriaGasto = categoriaGastoRepository.findByUsuarioCod(usuario.getCod());
 		return ResponseEntity.ok(categoriaGasto);
 	}
 	@SuppressWarnings("rawtypes")
 	@CrossOrigin
+	@PreAuthorize("@accessManager.usuarioDaCategoriaGasto(#cod)")
 	@DeleteMapping("/{cod}")
 	@ResponseBody
 	public ResponseEntity delete(@PathVariable(name = "cod") Long cod) {
