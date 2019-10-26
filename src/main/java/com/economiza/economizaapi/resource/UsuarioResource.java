@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,6 +47,7 @@ public class UsuarioResource {
 	}
 
 	@CrossOrigin
+	@PreAuthorize("@accessManager.usuario(#cod)")
 	@PutMapping("/{cod}")
 	public ResponseEntity<Usuario> update(@PathVariable(name = "cod") Long cod, @RequestBody Usuario user){
 		Usuario updateUser = UsuarioRepository.findById(cod).get();
@@ -56,6 +58,7 @@ public class UsuarioResource {
 	}
 
 	@CrossOrigin
+	@PreAuthorize("@accessManager.usuario(#cod)")
 	@PatchMapping("/{cod}")
 	public ResponseEntity<Usuario> updateSenha(@PathVariable(name = "cod") Long cod, @RequestBody Usuario user){
 		Usuario updateUser = UsuarioRepository.findById(cod).get();
@@ -65,6 +68,7 @@ public class UsuarioResource {
 		return ResponseEntity.ok(updatedUser);
 	}
 	@CrossOrigin
+	@PreAuthorize("@accessManager.usuario(#cod)")
 	@GetMapping("/{cod}")
 	public ResponseEntity<Usuario> getById(@PathVariable(name = "cod") Long cod) {
 		Usuario user = usuarioService.getById(cod);
@@ -100,6 +104,7 @@ public class UsuarioResource {
 	
 	@SuppressWarnings("rawtypes")
 	@CrossOrigin
+	@PreAuthorize("@accessManager.usuario(#cod)")
 	@DeleteMapping("/{cod}")
 	@ResponseBody
 	public ResponseEntity delete(@PathVariable(name = "cod") Long cod) {
