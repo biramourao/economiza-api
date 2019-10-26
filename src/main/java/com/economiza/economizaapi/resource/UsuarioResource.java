@@ -74,13 +74,6 @@ public class UsuarioResource {
 		Usuario user = usuarioService.getById(cod);
 		return ResponseEntity.ok(user);
 	}
-	
-	@CrossOrigin
-	@GetMapping
-	public ResponseEntity<List<Usuario>> listAll() {
-		List<Usuario> users = UsuarioRepository.findAll();
-		return ResponseEntity.ok(users);
-	}
 
 	@CrossOrigin
 	@PostMapping("/login")
