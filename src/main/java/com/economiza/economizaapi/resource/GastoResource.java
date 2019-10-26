@@ -107,15 +107,11 @@ public class GastoResource {
 	}
 	
 	@CrossOrigin
+	@PreAuthorize("@accessManager.usuarioDaCategoriaGasto(#cod)")
 	@GetMapping("/categoria-de-gasto/{cod}")
 	public ResponseEntity<List<Gasto>> getByCategoriaGastoCod(@PathVariable("cod") Long cod) {
-		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Optional<Usuario> result = usuarioRepository.findByEmail(email);
-		if(!result.isPresent())  {
-			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
-		}
-		Usuario usuario = result.get();
-		List<Gasto> gasto = gastoService.findByCategoriaGastoCodAndUsuarioCod(cod, usuario.getCod());
+		
+		List<Gasto> gasto = gastoService.findByCategoriaGastoCod(cod);
 		return ResponseEntity.ok(gasto);
 	}
 }
