@@ -29,8 +29,8 @@ public class CategoriaGastoService {
 		return result.orElseThrow(()-> new NotFoundException("Categoria com id " + id + ", não encontrado!"));
 	}
 	
-	public List<CategoriaGasto> listAll() {
-		List<CategoriaGasto> categoriasGasto = categoriaGastoRepository.findAll();
+	public List<CategoriaGasto> getByUsuarioCod(Long usuarioCod) {
+		List<CategoriaGasto> categoriasGasto = categoriaGastoRepository.findByUsuarioCod(usuarioCod);
 		return categoriasGasto;
 	}
 	
