@@ -33,9 +33,6 @@ public class FonteDeRenda {
 	private double valor;
 	
 	@Column(nullable = false)
-	private int frequencia;
-	
-	@Column(nullable = false)
 	private Date dtInsercao;
 	
 	@ManyToOne
