@@ -112,7 +112,7 @@ public class GastoRepositoryTest {
 		
 		@Test
 		public void ifindByCategoriaGastoTest() {
-			List<Gasto> gasto = gastoRepository.findByCategoriaGastoCodAndUsuarioCod(1L);
+			List<Gasto> gasto = gastoRepository.findByCategoriaGastoCod(1L);
 			System.out.println(gasto);
 			assertThat(gasto.size()).isEqualTo(1);
 			
