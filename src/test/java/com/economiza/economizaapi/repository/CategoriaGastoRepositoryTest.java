@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.economiza.economizaapi.model.CategoriaGasto;
+import com.economiza.economizaapi.model.Usuario;
 
 @RunWith(SpringRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -22,12 +23,16 @@ public class CategoriaGastoRepositoryTest {
 
 	@Autowired
 	private CategoriaGastoRepository categoriaGastoRepository;
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 	
 	@Test
 	public void asaveTest() {
-		CategoriaGasto categoriaGasto = new CategoriaGasto(null,"Transporte");
+		Usuario usuario = new Usuario(null,"ubiratan.mourao@gmail.com","Ubiratan Leitão Mourão","123456");
+		Usuario savedUsuario = usuarioRepository.save(usuario);
+		CategoriaGasto categoriaGasto = new CategoriaGasto(null,"Transporte", savedUsuario);
 		CategoriaGasto savedCategoriaGasto = categoriaGastoRepository.save(categoriaGasto);
-		CategoriaGasto categoriaGasto2 = new CategoriaGasto(null, "Alimentação");
+		CategoriaGasto categoriaGasto2 = new CategoriaGasto(null, "Alimentação", savedUsuario);
 
 		categoriaGastoRepository.save(categoriaGasto2);
 		
@@ -37,7 +42,9 @@ public class CategoriaGastoRepositoryTest {
 	
 	@Test
 	public void bupdateTest() {
-		CategoriaGasto categoriaGasto = new CategoriaGasto(1L,"Carro");
+		Usuario usuario = new Usuario(null,"ubiratan.mourao@gmail.com","Ubiratan Leitão Mourão","123456");
+		Usuario savedUsuario = usuarioRepository.save(usuario);
+		CategoriaGasto categoriaGasto = new CategoriaGasto(1L,"Carro", savedUsuario);
 		CategoriaGasto savedCategoriaGasto = categoriaGastoRepository.save(categoriaGasto);
 		
 		assertThat(savedCategoriaGasto.getDescricao()).isEqualTo("Carro");	

@@ -35,13 +35,13 @@ public class FonteDeRendaRepositoryTest {
 		Usuario usuario = new Usuario(null,"ubiratan.mourao@gmail.com","Ubiratan Leitão Mourão","123456");
 		Usuario savedUsuario = usuarioRepository.save(usuario);
 		
-		FonteDeRenda fonteDeRenda= new FonteDeRenda(null, "Salario Bira", 1700.00, 30,new Date(), savedUsuario);
+		FonteDeRenda fonteDeRenda= new FonteDeRenda(null, "Salario Bira", 1700.00, new Date(), savedUsuario);
 		FonteDeRenda savedFonteDeRenda = fonteDeRendaRepository.save(fonteDeRenda);
 		
 		Usuario usuario2 = new Usuario(null,"raianyramos1k@gmail.com","Raiany Ramos","123");
 		Usuario savedUsuario2 = usuarioRepository.save(usuario2);
 		
-		FonteDeRenda fonteDeRenda2= new FonteDeRenda(null, "Salario Raiany", 1700.00, 30,new Date(), savedUsuario2);
+		FonteDeRenda fonteDeRenda2= new FonteDeRenda(null, "Salario Raiany", 1700.00, new Date(), savedUsuario2);
 		fonteDeRendaRepository.save(fonteDeRenda2);
 		
 		assertThat(savedFonteDeRenda.getDescricao()).isEqualTo("Salario Bira");
@@ -52,7 +52,7 @@ public class FonteDeRendaRepositoryTest {
 	public void bupdateTest() {
 		Optional<Usuario> usuario = usuarioRepository.findById(1L);
 		
-		FonteDeRenda fonteDeRenda= new FonteDeRenda(1L, "Salario", 1700.00, 30,new Date(), usuario.get());
+		FonteDeRenda fonteDeRenda= new FonteDeRenda(1L, "Salario", 1700.00, new Date(), usuario.get());
 		FonteDeRenda savedFonteDeRenda = fonteDeRendaRepository.save(fonteDeRenda);
 		
 		assertThat(savedFonteDeRenda.getDescricao()).isEqualTo("Salario");	

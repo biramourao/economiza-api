@@ -47,7 +47,7 @@ public class GastoRepositoryTest {
 			CartaoDeCredito cartaoDeCredito2 = new CartaoDeCredito(null, "Nu Raiany", 6, 1400.50, 300, savedUsuario2);
 			cartaoDeCreditoRepository.save(cartaoDeCredito2);
 			CartaoDeCredito savedCartaoDeCredito = cartaoDeCreditoRepository.save(cartaoDeCredito);
-			CategoriaGasto savedCategoriaGasto = categoriaGastoRepository.save(new CategoriaGasto(null, "Alimentacao"));
+			CategoriaGasto savedCategoriaGasto = categoriaGastoRepository.save(new CategoriaGasto(null, "Alimentacao",savedUsuario2));
 			Gasto gasto = new Gasto(null, "Compras", 600.00, new Date(), 1, null, savedUsuario, savedCategoriaGasto, savedCartaoDeCredito);
 			Gasto createdGasto = gastoRepository.save(gasto);
 			assertThat(createdGasto.getNome()).isEqualTo("Compras");
