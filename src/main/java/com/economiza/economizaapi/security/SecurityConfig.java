@@ -50,5 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				   .authorizeRequests()
 				   .anyRequest().authenticated();
 		http.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.cors();
 	}
 }
