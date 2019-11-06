@@ -28,6 +28,7 @@ import com.economiza.economizaapi.dto.UsuarioLoginDTO;
 import com.economiza.economizaapi.model.Usuario;
 import com.economiza.economizaapi.repository.UsuarioRepository;
 import com.economiza.economizaapi.security.JwtManager;
+import com.economiza.economizaapi.security.JwtResponse;
 import com.economiza.economizaapi.service.UsuarioService;
 import com.economiza.economizaapi.service.util.HashUtil;
 
@@ -77,7 +78,7 @@ public class UsuarioResource {
 
 	@CrossOrigin
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody UsuarioLoginDTO user) {
+	public ResponseEntity<JwtResponse> login(@RequestBody UsuarioLoginDTO user) {
 
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getSenha());
 		Authentication auth = authenticationManager.authenticate(token);
@@ -92,7 +93,8 @@ public class UsuarioResource {
 				.map(authority -> authority.getAuthority())
 				.collect(Collectors.toList());
 		String jwt = jwtManager.createToken(email, roles);
-		return ResponseEntity.ok(jwt);
+		return ResponseEntity.ok(new JwtResponse(jwt, userSpring.getUsername(), userSpring.getAuthorities()));
+		
 	}
 	
 	@SuppressWarnings("rawtypes")
