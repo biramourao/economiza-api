@@ -33,7 +33,7 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<ApiError> handleBadCredentialsException(BadCredentialsException ex) {
-		ApiError error = new ApiError(HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), new Date());
+		ApiError error = new ApiError(HttpStatus.UNAUTHORIZED.value(), "Email ou Senha Incorretos!", new Date());
 
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
 	}
