@@ -22,4 +22,8 @@ public interface GastoRepository extends JpaRepository<Gasto, Long>{
 	@Modifying
 	@Query("UPDATE Gasto SET dtPagamento = ?2 WHERE cod = ?1")
 	public int efetuarPagamento(Long cod, Date dtPagamento);
+	
+	@Transactional(readOnly = false)
+	@Modifying
+	public int deleteByUsuarioCod(Long cod);
 }

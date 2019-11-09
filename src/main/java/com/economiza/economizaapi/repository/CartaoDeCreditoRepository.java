@@ -19,6 +19,9 @@ public interface CartaoDeCreditoRepository extends JpaRepository<CartaoDeCredito
 	public int alteraSaldoRestante(Long cod, double saldoRestante);
 	
 	public List<CartaoDeCredito> findByUsuarioCod(Long cod);
+	@Transactional(readOnly = false)
+	@Modifying
+	public int deleteByUsuarioCod(Long cod);
 	
 }
 
