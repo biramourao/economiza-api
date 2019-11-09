@@ -36,6 +36,13 @@ public class GastoResource {
 	@CrossOrigin
 	@PostMapping
 	public ResponseEntity<Gasto> save(@RequestBody Gasto gasto) {
+		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Usuario> result = usuarioRepository.findByEmail(email);
+		if(!result.isPresent())  {
+			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
+		}
+		Usuario usuario = result.get();
+		gasto.setUsuario(usuario);
 		Gasto createdGasto = gastoService.save(gasto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdGasto);
 	}
@@ -44,7 +51,15 @@ public class GastoResource {
 	@PreAuthorize("@accessManager.usuarioDoGasto(#cod)")
 	@PutMapping("/{cod}")
 	public ResponseEntity<Gasto> update(@PathVariable(name = "cod") Long cod, @RequestBody Gasto gasto){
+		
 		gasto.setCod(cod);
+		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Usuario> result = usuarioRepository.findByEmail(email);
+		if(!result.isPresent())  {
+			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
+		}
+		Usuario usuario = result.get();
+		gasto.setUsuario(usuario);
 		Gasto updatedGasto = gastoService.update(gasto);
 		return ResponseEntity.ok(updatedGasto);
 	}

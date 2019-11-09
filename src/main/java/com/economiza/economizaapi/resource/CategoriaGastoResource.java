@@ -36,6 +36,13 @@ public class CategoriaGastoResource {
 	@CrossOrigin
 	@PostMapping
 	public ResponseEntity<CategoriaGasto> save(@RequestBody CategoriaGasto categoriaGasto) {
+		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Usuario> result = usuarioRepository.findByEmail(email);
+		if(!result.isPresent())  {
+			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
+		}
+		Usuario usuario = result.get();
+		categoriaGasto.setUsuario(usuario);
 		CategoriaGasto createdCategoriaGasto = categoriaGastoService.save(categoriaGasto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdCategoriaGasto);
 	}
@@ -45,6 +52,13 @@ public class CategoriaGastoResource {
 	@PutMapping("/{cod}")
 	public ResponseEntity<CategoriaGasto> update(@PathVariable(name = "cod") Long cod, @RequestBody CategoriaGasto categoriaGasto){
 		categoriaGasto.setCod(cod);
+		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Usuario> result = usuarioRepository.findByEmail(email);
+		if(!result.isPresent())  {
+			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
+		}
+		Usuario usuario = result.get();
+		categoriaGasto.setUsuario(usuario);
 		CategoriaGasto updatedCategoriaGasto = categoriaGastoService.update(categoriaGasto);
 		return ResponseEntity.ok(updatedCategoriaGasto);
 	}

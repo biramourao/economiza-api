@@ -33,6 +33,13 @@ public class CartaoDeCreditoResource {
 	@CrossOrigin
 	@PostMapping
 	public ResponseEntity<CartaoDeCredito> save(@RequestBody CartaoDeCredito cartaoDeCredito) {
+		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Usuario> result = usuarioRepository.findByEmail(email);
+		if(!result.isPresent())  {
+			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
+		}
+		Usuario usuario = result.get();
+		cartaoDeCredito.setUsuario(usuario);
 		CartaoDeCredito createdCartaoDeCredito = cartaoDeCreditoService.save(cartaoDeCredito);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdCartaoDeCredito);
 	}
@@ -42,6 +49,13 @@ public class CartaoDeCreditoResource {
 	@PutMapping("/{cod}")
 	public ResponseEntity<CartaoDeCredito> update(@PathVariable(name = "cod") Long cod, @RequestBody CartaoDeCredito cartaoDeCredito){
 		cartaoDeCredito.setCod(cod);
+		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Usuario> result = usuarioRepository.findByEmail(email);
+		if(!result.isPresent())  {
+			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
+		}
+		Usuario usuario = result.get();
+		cartaoDeCredito.setUsuario(usuario);
 		CartaoDeCredito updatedCartaoDeCredito = cartaoDeCreditoService.update(cartaoDeCredito);
 		return ResponseEntity.ok(updatedCartaoDeCredito);
 	}

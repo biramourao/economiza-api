@@ -34,6 +34,13 @@ public class FonteDeRendaResource {
 	@CrossOrigin
 	@PostMapping
 	public ResponseEntity<FonteDeRenda> save(@RequestBody FonteDeRenda fonteDeRenda) {
+		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Usuario> result = usuarioRepository.findByEmail(email);
+		if(!result.isPresent())  {
+			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
+		}
+		Usuario usuario = result.get();
+		fonteDeRenda.setUsuario(usuario);
 		FonteDeRenda createdFonteDeRenda = fonteDeRendaService.save(fonteDeRenda);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdFonteDeRenda);
 	}
@@ -43,6 +50,13 @@ public class FonteDeRendaResource {
 	@PutMapping("/{cod}")
 	public ResponseEntity<FonteDeRenda> update(@PathVariable(name = "cod") Long cod, @RequestBody FonteDeRenda fonteDeRenda){
 		fonteDeRenda.setCod(cod);
+		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Usuario> result = usuarioRepository.findByEmail(email);
+		if(!result.isPresent())  {
+			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
+		}
+		Usuario usuario = result.get();
+		fonteDeRenda.setUsuario(usuario);
 		FonteDeRenda updatedFonteDeRenda = fonteDeRendaService.update(fonteDeRenda);
 		return ResponseEntity.ok(updatedFonteDeRenda);
 	}
