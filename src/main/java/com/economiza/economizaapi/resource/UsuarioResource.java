@@ -26,6 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.economiza.economizaapi.dto.UsuarioLoginDTO;
 import com.economiza.economizaapi.model.Usuario;
+import com.economiza.economizaapi.repository.CartaoDeCreditoRepository;
+import com.economiza.economizaapi.repository.CategoriaGastoRepository;
+import com.economiza.economizaapi.repository.FonteDeRendaRepository;
+import com.economiza.economizaapi.repository.GastoRepository;
 import com.economiza.economizaapi.repository.UsuarioRepository;
 import com.economiza.economizaapi.security.JwtManager;
 import com.economiza.economizaapi.security.JwtResponse;
@@ -39,6 +43,12 @@ public class UsuarioResource {
 	@Autowired private UsuarioRepository UsuarioRepository;
 	@Autowired private AuthenticationManager authenticationManager;
 	@Autowired private JwtManager jwtManager;
+	@Autowired private FonteDeRendaRepository fonteDeRendaRepository;
+	@Autowired private GastoRepository gastoRepository;
+	@Autowired private CartaoDeCreditoRepository cartaoDeCreditoRepository;
+	@Autowired private CategoriaGastoRepository categoriaGastoRepository;
+
+
 
 	@CrossOrigin
 	@PostMapping
@@ -106,6 +116,10 @@ public class UsuarioResource {
 		Usuario deletedUser = null;
 		deletedUser = usuarioService.getById(cod);
 		if(deletedUser != null) {
+			categoriaGastoRepository.deleteByUsuarioCod(deletedUser.getCod());
+			cartaoDeCreditoRepository.deleteByUsuarioCod(deletedUser.getCod());
+			gastoRepository.deleteByUsuarioCod(deletedUser.getCod());
+			fonteDeRendaRepository.deleteByUsuarioCod(deletedUser.getCod());
 			usuarioService.deleteById(cod);
 			return new ResponseEntity(HttpStatus.OK);
 		}else{
