@@ -107,7 +107,10 @@ public class GastoResource {
 	@PreAuthorize("@accessManager.usuarioDoGasto(#cod)")
 	@PatchMapping("/{cod}/pagamento")
 	public ResponseEntity<Gasto> efetuarPagamento(@PathVariable("cod") Long cod) {
-		Date dtPagamento = new Date();
+		Date dtPagamento = null;
+		if(gastoService.getById(cod).getDtPagamento() == null) {
+			dtPagamento = new Date();
+		}
 		Gasto gasto = gastoService.efetuarPagamento(cod, dtPagamento);
 		return ResponseEntity.ok(gasto);
 
