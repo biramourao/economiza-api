@@ -102,7 +102,7 @@ public class GastoResource {
 			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
 		}
 		Usuario usuario = result.get();
-		if (dtInicio == null && dtFim == null) {
+		if ((dtInicio == null && dtFim == null)||(dtInicio == "" && dtFim == "" )) {
 			List<Gasto> gasto = gastoService.findByUsuarioCod(usuario.getCod());
 			return ResponseEntity.ok(gasto);
 		} else {
