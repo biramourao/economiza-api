@@ -26,4 +26,8 @@ public interface GastoRepository extends JpaRepository<Gasto, Long>{
 	@Transactional(readOnly = false)
 	@Modifying
 	public int deleteByUsuarioCod(Long cod);
+	
+	@Query("SELECT g FROM Gasto g WHERE usuario.cod = ?1 and vencimento BETWEEN TO_DATE(?2,'yyyy-MM-dd') AND TO_DATE(?3, 'yyyy-MM-dd')")
+	public List<Gasto> findByUsuarioCodAndVencimento(Long cod, String inicio, String fim );
+
 }

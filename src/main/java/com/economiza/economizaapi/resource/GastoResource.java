@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,15 +31,17 @@ import com.economiza.economizaapi.service.GastoService;
 @RestController
 @RequestMapping("/gastos")
 public class GastoResource {
-	@Autowired private GastoService gastoService;
-	@Autowired private UsuarioRepository usuarioRepository;
+	@Autowired
+	private GastoService gastoService;
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	@CrossOrigin
 	@PostMapping
 	public ResponseEntity<Gasto> save(@RequestBody Gasto gasto) {
 		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Optional<Usuario> result = usuarioRepository.findByEmail(email);
-		if(!result.isPresent())  {
+		if (!result.isPresent()) {
 			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
 		}
 		Usuario usuario = result.get();
@@ -50,12 +53,12 @@ public class GastoResource {
 	@CrossOrigin
 	@PreAuthorize("@accessManager.usuarioDoGasto(#cod)")
 	@PutMapping("/{cod}")
-	public ResponseEntity<Gasto> update(@PathVariable(name = "cod") Long cod, @RequestBody Gasto gasto){
-		
+	public ResponseEntity<Gasto> update(@PathVariable(name = "cod") Long cod, @RequestBody Gasto gasto) {
+
 		gasto.setCod(cod);
 		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Optional<Usuario> result = usuarioRepository.findByEmail(email);
-		if(!result.isPresent())  {
+		if (!result.isPresent()) {
 			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
 		}
 		Usuario usuario = result.get();
@@ -71,7 +74,7 @@ public class GastoResource {
 		Gasto gasto = gastoService.getById(cod);
 		return ResponseEntity.ok(gasto);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@CrossOrigin
 	@PreAuthorize("@accessManager.usuarioDoGasto(#cod)")
@@ -80,27 +83,32 @@ public class GastoResource {
 	public ResponseEntity delete(@PathVariable(name = "cod") Long cod) {
 		Gasto deletedGasto = null;
 		deletedGasto = gastoService.getById(cod);
-		if(deletedGasto != null) {
+		if (deletedGasto != null) {
 			gastoService.deleteById(cod);
 			return new ResponseEntity(HttpStatus.OK);
-		}else{
+		} else {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@CrossOrigin
 	@GetMapping
-	public ResponseEntity<List<Gasto>> getByUserId() {
-		
+	public ResponseEntity<List<Gasto>> getByUserId(@RequestParam(required = false) String dtInicio,
+			@RequestParam(required = false) String dtFim) {
+
 		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Optional<Usuario> result = usuarioRepository.findByEmail(email);
-		if(!result.isPresent())  {
+		if (!result.isPresent()) {
 			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
 		}
 		Usuario usuario = result.get();
-		
-		List<Gasto> gasto = gastoService.findByUsuarioCod(usuario.getCod());
-		return ResponseEntity.ok(gasto);
+		if (dtInicio == null && dtFim == null) {
+			List<Gasto> gasto = gastoService.findByUsuarioCod(usuario.getCod());
+			return ResponseEntity.ok(gasto);
+		} else {
+			List<Gasto> gasto = gastoService.findByUsuarioCodAndVencimento(usuario.getCod(),dtInicio,dtFim);
+			return ResponseEntity.ok(gasto);
+		}
 	}
 
 	@CrossOrigin
@@ -108,14 +116,14 @@ public class GastoResource {
 	@PatchMapping("/{cod}/pagamento")
 	public ResponseEntity<Gasto> efetuarPagamento(@PathVariable("cod") Long cod) {
 		Date dtPagamento = null;
-		if(gastoService.getById(cod).getDtPagamento() == null) {
+		if (gastoService.getById(cod).getDtPagamento() == null) {
 			dtPagamento = new Date();
 		}
 		Gasto gasto = gastoService.efetuarPagamento(cod, dtPagamento);
 		return ResponseEntity.ok(gasto);
 
 	}
-	
+
 	@CrossOrigin
 	@PreAuthorize("@accessManager.usuarioDoCartaoDeCredito(#cod)")
 	@GetMapping("/cartao-de-credito/{cod}")
@@ -123,12 +131,12 @@ public class GastoResource {
 		List<Gasto> gasto = gastoService.findByCartaoDeCreditoCod(cod);
 		return ResponseEntity.ok(gasto);
 	}
-	
+
 	@CrossOrigin
 	@PreAuthorize("@accessManager.usuarioDaCategoriaGasto(#cod)")
 	@GetMapping("/categoria-de-gasto/{cod}")
 	public ResponseEntity<List<Gasto>> getByCategoriaGastoCod(@PathVariable("cod") Long cod) {
-		
+
 		List<Gasto> gasto = gastoService.findByCategoriaGastoCod(cod);
 		return ResponseEntity.ok(gasto);
 	}

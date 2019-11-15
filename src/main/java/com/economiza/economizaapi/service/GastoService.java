@@ -42,6 +42,9 @@ public class GastoService {
 	public List<Gasto> findByUsuarioCod(Long cod) {
 		return gastoRepository.findByUsuarioCod(cod);
 	}
+	public List<Gasto> findByUsuarioCodAndVencimento(Long cod, String inicio, String fim) {
+		return gastoRepository.findByUsuarioCodAndVencimento(cod, inicio, fim);
+	}
 	public List<Gasto> findByCartaoDeCreditoCod(Long cod) {
 		return gastoRepository.findByCartaoDeCreditoCod(cod);
 	}
