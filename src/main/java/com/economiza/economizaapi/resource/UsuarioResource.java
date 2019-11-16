@@ -1,6 +1,7 @@
 package com.economiza.economizaapi.resource;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.economiza.economizaapi.dto.UsuarioLoginDTO;
+import com.economiza.economizaapi.exception.NotFoundException;
 import com.economiza.economizaapi.model.Usuario;
 import com.economiza.economizaapi.repository.CartaoDeCreditoRepository;
 import com.economiza.economizaapi.repository.CategoriaGastoRepository;
@@ -79,13 +81,16 @@ public class UsuarioResource {
 		return ResponseEntity.ok(updatedUser);
 	}
 	@CrossOrigin
-	@PreAuthorize("@accessManager.usuario(#cod)")
-	@GetMapping("/{cod}")
-	public ResponseEntity<Usuario> getById(@PathVariable(name = "cod") Long cod) {
-		Usuario user = usuarioService.getById(cod);
-		return ResponseEntity.ok(user);
+	@GetMapping
+	public ResponseEntity<Usuario> getUsuario() {
+		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Usuario> result = UsuarioRepository.findByEmail(email);
+		if(!result.isPresent())  {
+			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
+		}
+		Usuario usuario = result.get();
+		return ResponseEntity.ok(usuario);
 	}
-
 	@CrossOrigin
 	@PostMapping("/login")
 	public ResponseEntity<JwtResponse> login(@RequestBody UsuarioLoginDTO user) {
