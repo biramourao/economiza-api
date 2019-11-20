@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.economiza.economizaapi.exception.NotFoundException;
 import com.economiza.economizaapi.model.FonteDeRenda;
+import com.economiza.economizaapi.model.Gasto;
 import com.economiza.economizaapi.model.Usuario;
 import com.economiza.economizaapi.repository.UsuarioRepository;
 import com.economiza.economizaapi.service.FonteDeRendaService;
@@ -44,6 +46,7 @@ public class FonteDeRendaResource {
 		FonteDeRenda createdFonteDeRenda = fonteDeRendaService.save(fonteDeRenda);
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdFonteDeRenda);
 	}
+	
 
 	@CrossOrigin
 	@PreAuthorize("@accessManager.usuarioDaFonteDeRenda(#cod)")
@@ -87,15 +90,24 @@ public class FonteDeRendaResource {
 	
 	@CrossOrigin
 	@GetMapping
-	public ResponseEntity<List<FonteDeRenda>> getByUserId() {
+	public ResponseEntity<List<FonteDeRenda>> getByUserId(@RequestParam(required = false) String dtInicio,
+			@RequestParam(required = false) String dtFim) {
 		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Optional<Usuario> result = usuarioRepository.findByEmail(email);
 		if(!result.isPresent())  {
 			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
 		}
 		Usuario usuario = result.get();
-		List<FonteDeRenda> fonteDeRenda = fonteDeRendaService.findByUsuarioCod(usuario.getCod());
-		return ResponseEntity.ok(fonteDeRenda);
+		
+		if ((dtInicio == null && dtFim == null)||(dtInicio == "" && dtFim == "" )) {
+			List<FonteDeRenda> fonteDeRenda = fonteDeRendaService.findByUsuarioCod(usuario.getCod());
+			return ResponseEntity.ok(fonteDeRenda);
+		} else {
+			List<FonteDeRenda> fonteDeRenda = fonteDeRendaService.findByUsuarioCodAndDtVencimento(usuario.getCod(),dtInicio,dtFim);
+			return ResponseEntity.ok(fonteDeRenda);
+		}
+		
 	}
+	
 	
 }

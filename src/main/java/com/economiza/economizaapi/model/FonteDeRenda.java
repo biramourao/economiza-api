@@ -33,7 +33,7 @@ public class FonteDeRenda {
 	private double valor;
 	
 	@Column(nullable = false)
-	private Date dtInsercao;
+	private Date dtValidade;
 	
 	@ManyToOne
 	private Usuario usuario;

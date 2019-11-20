@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.economiza.economizaapi.exception.NotFoundException;
 import com.economiza.economizaapi.model.FonteDeRenda;
+import com.economiza.economizaapi.model.Gasto;
 import com.economiza.economizaapi.repository.FonteDeRendaRepository;
 
 @Service
@@ -19,14 +20,12 @@ public class FonteDeRendaService {
 	
 	
 	public FonteDeRenda save(FonteDeRenda fonteDeRenda) {
-		fonteDeRenda.setDtInsercao(new Date());
 		return fonteDeRendaRepository.save(fonteDeRenda);
 		
 	}
 	
 	
 	public FonteDeRenda update(FonteDeRenda fonteDeRenda) {
-		fonteDeRenda.setDtInsercao(fonteDeRendaRepository.findById(fonteDeRenda.getCod()).get().getDtInsercao());
 		return fonteDeRendaRepository.save(fonteDeRenda);
 	}
 	
@@ -36,6 +35,9 @@ public class FonteDeRendaService {
 		return result.orElseThrow(()-> new NotFoundException("Fonte de Renda com id " + id + ", não encontrado!"));
 	}
 	
+	public List<FonteDeRenda> findByUsuarioCodAndDtVencimento(Long cod, String inicio, String fim) {
+		return fonteDeRendaRepository.findByUsuarioCodAndDtValidade(cod, inicio, fim);
+	}
 	
 	public List<FonteDeRenda> listAll() {
 		return fonteDeRendaRepository.findAll();
