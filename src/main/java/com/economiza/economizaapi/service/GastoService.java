@@ -1,5 +1,8 @@
 package com.economiza.economizaapi.service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +21,19 @@ public class GastoService {
 	private GastoRepository gastoRepository;
 
 	public Gasto save(Gasto gasto) {
+		gasto.getVencimento().setDate(gasto.getVencimento().getDate()+1);
+		if(gasto.getDtPagamento() != null) {
+			gasto.getDtPagamento().setDate(gasto.getDtPagamento().getDate()+1);
+		}
 		return gastoRepository.save(gasto);
 
 	}
 
 	public Gasto update(Gasto gasto) {
+		gasto.getVencimento().setDate(gasto.getVencimento().getDate()+1);
+		if(gasto.getDtPagamento() != null) {
+			gasto.getDtPagamento().setDate(gasto.getDtPagamento().getDate()+1);
+		}
 		return gastoRepository.save(gasto);
 	}
 
@@ -43,7 +54,19 @@ public class GastoService {
 		return gastoRepository.findByUsuarioCod(cod);
 	}
 	public List<Gasto> findByUsuarioCodAndVencimento(Long cod, String inicio, String fim) {
-		return gastoRepository.findByUsuarioCodAndVencimento(cod, inicio, fim);
+		
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat dateFormat = formato;
+		String fimMaisUm = "";
+		try {
+			Date dfim = formato.parse(fim);
+			dfim.setDate(dfim.getDate()+1);
+			fimMaisUm = dateFormat.format(dfim);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return gastoRepository.findByUsuarioCodAndVencimento(cod, inicio, fimMaisUm);
 	}
 	public List<Gasto> findByCartaoDeCreditoCod(Long cod) {
 		return gastoRepository.findByCartaoDeCreditoCod(cod);
