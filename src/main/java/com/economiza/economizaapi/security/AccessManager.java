@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 import com.economiza.economizaapi.exception.NotFoundException;
 import com.economiza.economizaapi.model.CartaoDeCredito;
 import com.economiza.economizaapi.model.CategoriaGasto;
-import com.economiza.economizaapi.model.FonteDeRenda;
+import com.economiza.economizaapi.model.Renda;
 import com.economiza.economizaapi.model.Gasto;
 import com.economiza.economizaapi.model.Usuario;
 import com.economiza.economizaapi.repository.UsuarioRepository;
 import com.economiza.economizaapi.service.CartaoDeCreditoService;
 import com.economiza.economizaapi.service.CategoriaGastoService;
-import com.economiza.economizaapi.service.FonteDeRendaService;
+import com.economiza.economizaapi.service.RendaService;
 import com.economiza.economizaapi.service.GastoService;
 
 @Component("accessManager")
@@ -30,7 +30,7 @@ public class AccessManager {
 	@Autowired
 	CategoriaGastoService categoriaGastoService;
 	@Autowired
-	FonteDeRendaService fonteDeRendaService;
+	RendaService fonteDeRendaService;
 
 	public boolean usuario(Long id) {
 		String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -88,7 +88,7 @@ public class AccessManager {
 			throw new NotFoundException("Não foi encontrado um usuário com esse email = " + email);
 		}
 		Usuario usuario = result.get();
-		FonteDeRenda fonteDeRenda = fonteDeRendaService.getById(id);
+		Renda fonteDeRenda = fonteDeRendaService.getById(id);
 		return fonteDeRenda.getUsuario().getCod() == usuario.getCod();
 
 	}

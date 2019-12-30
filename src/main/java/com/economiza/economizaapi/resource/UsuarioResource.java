@@ -30,7 +30,7 @@ import com.economiza.economizaapi.exception.NotFoundException;
 import com.economiza.economizaapi.model.Usuario;
 import com.economiza.economizaapi.repository.CartaoDeCreditoRepository;
 import com.economiza.economizaapi.repository.CategoriaGastoRepository;
-import com.economiza.economizaapi.repository.FonteDeRendaRepository;
+import com.economiza.economizaapi.repository.RendaRepository;
 import com.economiza.economizaapi.repository.GastoRepository;
 import com.economiza.economizaapi.repository.UsuarioRepository;
 import com.economiza.economizaapi.security.JwtManager;
@@ -45,7 +45,7 @@ public class UsuarioResource {
 	@Autowired private UsuarioRepository UsuarioRepository;
 	@Autowired private AuthenticationManager authenticationManager;
 	@Autowired private JwtManager jwtManager;
-	@Autowired private FonteDeRendaRepository fonteDeRendaRepository;
+	@Autowired private RendaRepository fonteDeRendaRepository;
 	@Autowired private GastoRepository gastoRepository;
 	@Autowired private CartaoDeCreditoRepository cartaoDeCreditoRepository;
 	@Autowired private CategoriaGastoRepository categoriaGastoRepository;
