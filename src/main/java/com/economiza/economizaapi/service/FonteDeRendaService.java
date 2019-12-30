@@ -1,5 +1,8 @@
 package com.economiza.economizaapi.service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,12 +23,14 @@ public class FonteDeRendaService {
 	
 	
 	public FonteDeRenda save(FonteDeRenda fonteDeRenda) {
+		fonteDeRenda.getDtValidade().setDate(fonteDeRenda.getDtValidade().getDate()+1);
 		return fonteDeRendaRepository.save(fonteDeRenda);
 		
 	}
 	
 	
 	public FonteDeRenda update(FonteDeRenda fonteDeRenda) {
+		fonteDeRenda.getDtValidade().setDate(fonteDeRenda.getDtValidade().getDate()+1);
 		return fonteDeRendaRepository.save(fonteDeRenda);
 	}
 	
@@ -36,7 +41,18 @@ public class FonteDeRendaService {
 	}
 	
 	public List<FonteDeRenda> findByUsuarioCodAndDtVencimento(Long cod, String inicio, String fim) {
-		return fonteDeRendaRepository.findByUsuarioCodAndDtValidade(cod, inicio, fim);
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat dateFormat = formato;
+		String fimMaisUm = "";
+		try {
+			Date dfim = formato.parse(fim);
+			dfim.setDate(dfim.getDate()+1);
+			fimMaisUm = dateFormat.format(dfim);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return fonteDeRendaRepository.findByUsuarioCodAndDtValidade(cod, inicio, fimMaisUm);
 	}
 	
 	public List<FonteDeRenda> listAll() {
