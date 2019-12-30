@@ -23,28 +23,14 @@ import lombok.ToString;
 
 @Entity
 @Table
-public class Gasto {
+public class Gasto extends Movimentacao{
 	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long cod;
-	
-	@Column(length = 45, nullable = false)
-	private String nome;
-	
-	@Column(nullable = false)
-	private double valor;
 	
 	@Column(nullable = false)
 	private Date vencimento;
 	
-	@Column(nullable = false)
-	private int qtdParcelas;
-	
 	@Column()
 	private Date dtPagamento;
-	
-	@ManyToOne
-	private Usuario usuario;
 	
 	@ManyToOne
 	private CategoriaGasto categoriaGasto;
